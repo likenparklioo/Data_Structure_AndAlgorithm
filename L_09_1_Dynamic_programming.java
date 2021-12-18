@@ -6,6 +6,10 @@ class L_09_1_Dynamic_programming {
         int dist = getStrDistance(a, b);
 
         System.out.println(a + "<->" + b + ":" + dist);
+
+        int combCount = getMinCombination(100, new int[] {2, 3, 7});
+
+        System.out.println("min comb count :" + combCount);
     }
 
     /** 
@@ -55,5 +59,56 @@ class L_09_1_Dynamic_programming {
         }
 
         return distanceTable[a.length()][b.length()];
+    }
+
+    /** 
+     * 钱币组合的新问题
+     * 给定总金额和面值种类，求钱币最少的组合
+     * @param total
+     * @return 钱币数
+     */
+    public static int getMinCombination(int total, int[] arrayCurrency) {
+        if (total <= 0 || arrayCurrency.length == 0) return -1;
+
+        int[] minCombList = new int[total];
+        for (int i = 0; i < total; i++) {
+            minCombList[i] = -1;
+        }
+
+        for (int i = 0; i < total; i++) {
+            
+            int min = -1;
+            for(int j=0; j < arrayCurrency.length; j++) {
+                int _combCount = -1;
+
+                int diff = i + 1 - arrayCurrency[j];
+                
+                if (diff == 0) {
+                    _combCount = 1;
+                }
+
+                if (diff > 0) {
+                    if (minCombList[diff - 1] != -1) {
+                        _combCount = minCombList[diff - 1] + 1;
+                    }
+                }
+
+                if (_combCount != -1) {
+                    if (min == -1) {
+                        min = _combCount;
+                    } else {
+                        if (_combCount < min) {
+                            min = _combCount;
+                        }   
+                    }
+                }
+            }
+            minCombList[i] = min;
+        }
+
+        for (int item : minCombList) {
+            System.out.println(item);
+        }
+        return minCombList[total - 1];
     }
 }
