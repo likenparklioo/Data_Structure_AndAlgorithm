@@ -1,5 +1,8 @@
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 
 public class L_11_1_Depth_First_Search {
@@ -11,7 +14,10 @@ public class L_11_1_Depth_First_Search {
         }
         System.out.println(parent);
 
-        // printNode(parent);
+        printNode_dfs(parent);
+        System.out.println("");
+        
+        printNode_bfs(parent);
 
         dfsSearchByStack(parent);
     }
@@ -36,16 +42,37 @@ public class L_11_1_Depth_First_Search {
         return found;
     }
 
-    public static void printNode (TreeNode node) {
+    public static void printNode_dfs (TreeNode node) {
         if (node.sons.size() == 0) {
             System.out.println("");
             return;
         }
 
         node.sons.forEach((k, v) -> {
-            printNode(v);
+            printNode_dfs(v);
             System.out.print(k);
         });
+    }
+
+    public static void printNode_bfs(TreeNode node) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        // HashSet<Character> visited = new HashSet<>();
+
+        queue.offer(node);
+        System.out.print(node.label);
+
+        while(!queue.isEmpty()) {
+            TreeNode current_node = queue.poll();
+            Iterator<java.util.Map.Entry<Character, TreeNode>> iter 
+                    = current_node.sons.entrySet().iterator();
+            
+            while(iter.hasNext()) {
+                TreeNode child = iter.next().getValue();
+                queue.offer(child);
+                System.out.print(child.label + " ");
+            }
+            //System.out.println("");
+        }
     }
 
     public static void dfsSearchByStack(TreeNode parent) {
@@ -54,7 +81,7 @@ public class L_11_1_Depth_First_Search {
 
         while(!stk.isEmpty()) {
             TreeNode node = stk.pop();
-            System.out.println(node.label);
+            // System.out.println(node.label);
 
             if (node.sons.size() == 0) {
                 // ここはいらない
